@@ -124,6 +124,7 @@
     ,zIndex: null //控件层叠顺序
     ,done: null //控件选择完毕后的回调，点击清空/现在/确定也均会触发
     ,change: null //日期时间改变后的回调
+    ,extendRange: null //快速选择的日期范围
   };
   
   //多语言
@@ -449,12 +450,16 @@
     
     //生成底部栏
     lay(divFooter).html(function(){
-      var html = [], btns = [];
+      var html = [], normalSelection = [], quickSelection = [], btns = [];
+        options.extendRange && options.extendRange.forEach((item) => {
+            quickSelection.push('<span lay-type="' + item.id + '" class="laydate-btns-' + item.id + '">' + item.text + '</span>');
+        });
+        html.push('<div class="laydate-footer-selection-quick">' + quickSelection.join('') + '</div>');
       if(options.type === 'datetime'){
-        html.push('<span lay-type="datetime" class="'+ ELEM_TIME_BTN +'">'+ lang.timeTips +'</span>');
+          normalSelection.push('<span lay-type="datetime" class="'+ ELEM_TIME_BTN +'">'+ lang.timeTips +'</span>');
       }
       if(!(!options.range && options.type === 'datetime')){
-        html.push('<span class="'+ ELEM_PREVIEW +'" title="'+ lang.preview +'"></span>')
+          normalSelection.push('<span class="'+ ELEM_PREVIEW +'" title="'+ lang.preview +'"></span>')
       }
       
       lay.each(options.btns, function(i, item){
@@ -463,7 +468,8 @@
         if(isStatic && item === 'clear') title = options.lang === 'cn' ? '重置' : 'Reset';
         btns.push('<span lay-type="'+ item +'" class="laydate-btns-'+ item +'">'+ title +'</span>');
       });
-      html.push('<div class="laydate-footer-btns">'+ btns.join('') +'</div>');
+      normalSelection.push('<div class="laydate-footer-btns">'+ btns.join('') +'</div>');
+      html.push('<div class="laydate-footer-selection">' + normalSelection.join('') + '</div>');
       return html.join('');
     }());
     
@@ -1440,8 +1446,29 @@
         that.done();
       }
     };
+
+    // 日期范围选择处理
+    options.extendRange && lay.each(options.extendRange, function (e, item) {
+        active[item.id] = function () {
+            options.dateTime = item.range[0].toJson(), that.endDate = item.range[1].toJson();
+            var ele = that.bindElem || options.elem[0], type = that.isInput(ele) ? "val" : "html", value = item.range[0].format(options.format) + " - " + item.range[1].format(options.format);
+            lay(ele)[type](value || ""), that.done(), that.remove()
+        }
+    });
+
     active[type] && active[type]();
   };
+
+    Date.prototype.format = function (e) {
+        var t = {"M+": this.getMonth() + 1, "d+": this.getDate(), "h+": this.getHours(), "m+": this.getMinutes(), "s+": this.getSeconds(), "q+": Math.floor((this.getMonth() + 3) / 3), S: this.getMilliseconds()};
+        /(y+)/.test(e) && (e = e.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length)));
+        for (var n in t) new RegExp("(" + n + ")").test(e) && (e = e.replace(RegExp.$1, 1 == RegExp.$1.length ? t[n] : ("00" + t[n]).substr(("" + t[n]).length)));
+        return e
+    };
+
+    Date.prototype.toJson = function () {
+        return {year: this.getFullYear(), month: this.getMonth(), date: this.getDate(), hours: this.getHours(), minutes: this.getMinutes(), seconds: this.getSeconds()}
+    };
   
   //统一切换处理
   Class.prototype.change = function(index){

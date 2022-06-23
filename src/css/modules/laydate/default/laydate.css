@@ -62,14 +62,16 @@ html #layuicss-laydate{display: none; position: absolute; width: 1989px;}
 .laydate-day-mark::after{position: absolute; content:''; right: 2px; top: 2px; width: 5px; height: 5px; border-radius: 50%;}
 
 /* 底部结构 */
-.layui-laydate-footer{position: relative; height: 46px; line-height: 26px; padding: 10px;}
+.layui-laydate-footer{positiondd: relative; heightdd: 46px; line-heightdd: 26px; padding: 10px;}
+.layui-laydate-footer .laydate-footer-selection{position: relative;}
 .layui-laydate-footer span{display: inline-block;  vertical-align: top; height: 26px; line-height: 24px; padding: 0 10px; border: 1px solid #C9C9C9; border-radius: 2px; background-color: #fff; font-size: 12px; cursor: pointer; white-space: nowrap; transition: all .3s;}
 .layui-laydate-footer span:hover{color: #5FB878;}
 .layui-laydate-footer span.layui-laydate-preview{cursor: default; border-color: transparent !important;}
 .layui-laydate-footer span.layui-laydate-preview:hover{color: #666;}
 .layui-laydate-footer span:first-child.layui-laydate-preview{padding-left: 0;}
-.laydate-footer-btns{position: absolute; right: 10px; top: 10px;}
-.laydate-footer-btns span{margin: 0 0 0 -1px;}
+.laydate-footer-btns{position: absolute; right: 10px; top: 0px;}
+.laydate-footer-btns span, .laydate-footer-selection-quick span:nth-child(n+2){margin: 0 0 0 -1px;}
+.laydate-footer-selection-quick {margin-bottom: 5px;}
 
 /* 年月列表 */
 .layui-laydate-list{position: absolute; left: 0; top: 0; width: 100%; height: 100%; padding: 10px; box-sizing: border-box; background-color: #fff;}
