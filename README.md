@@ -65,8 +65,8 @@ Layui 是一套开源的 Web UI 组件库，采用自身轻量级模块化规范
 
 配置使用：
 ```js
-extendRange: [
-    {id: 'today', text: '今天', range: [now, now]},
+[
+    {id: 'today', text: '今天', range: [new Date(), new Date()]},
     {
         id: 'yesterday',
         text: '昨天',
@@ -75,7 +75,7 @@ extendRange: [
     {
         id: 'this_week',
         text: '本周',
-        range: [new Date(new Date().setDate(new Date().getDate() - nowDayOfWeek + 1)), new Date()]
+        range: [new Date(new Date().setDate(new Date().getDate() - (new Date().getDay()) + 1)), new Date()]
     },
     {
         id: 'last_7_days',
@@ -87,8 +87,8 @@ extendRange: [
         text: '过去30天',
         range: [new Date(new Date().setDate(new Date().getDate() - 30)), new Date(new Date().setDate(new Date().getDate() - 1))]
     },
-    {id: 'this_month', text: '本月', range: [startDate1, now]},
-    {id: 'last_month', text: '上月', range: [startDate2, endDate2]}
+    {id: 'this_month', text: '本月', range: [new Date(new Date().setDate(1)), new Date()]},
+    {id: 'last_month', text: '上月', range: [new Date(new Date(new Date().setMonth(new Date().getMonth() - 1)).setDate(1)), new Date(new Date().setDate(0))]}
 ]
 ```
 
