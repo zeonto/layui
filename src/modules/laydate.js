@@ -1606,6 +1606,17 @@
       var type = lay(this).attr('lay-type');
       that.tool(this, type);
     });
+
+    // 鼠标移到快速选择按钮显示时间预览
+    options.isPreview && lay(that.footer).find('span').on('mouseenter', function () {
+        var laytype = lay(this).attr('lay-type');
+        options.extendRange && options.extendRange.forEach((item) => {
+            if (laytype === item.id) {
+                options.dateTime = item.range[0].toJson(), that.endDate = item.range[1].toJson();
+                that.preview()
+            }
+        });
+    });
   };
   
   //是否输入框
